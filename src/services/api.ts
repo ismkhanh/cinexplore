@@ -26,3 +26,20 @@ export const fetchMovies = async (query?: string, signal?: AbortSignal): Promise
     }
     return fetchFromAPI("/discover/movie?sort_by=popularity.desc", signal);
 };
+
+export const fetchMovieDetails = async (movieId: string): Promise<MovieDetails> => {
+    try {
+        const response = await fetch(`${TMDB.BASE_URL}/movie/${movieId}?api_key=${TMDB.API_KEY}`, {
+            headers: TMDB.headers,
+            method: 'GET'
+        });
+        if (!response.ok) throw new Error('Failed to get movie details of id ${movieId}');
+        const data = await response.json()
+        console.log(data);
+        return data
+    } catch(error) {
+        console.log(error);
+        throw error
+    }
+    
+}

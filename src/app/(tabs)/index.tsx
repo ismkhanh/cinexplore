@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const {
     data: movies,
@@ -26,7 +27,6 @@ export default function Index() {
     error: trendingError,
   } = useFetch(useCallback(() => getTrendingMovies(), []))
 
-  const insets = useSafeAreaInsets();
   
   return (
     <View className="flex-1 bg-primary">
@@ -47,7 +47,7 @@ export default function Index() {
         }}
         className="flex-1 px-5"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 100 }}
         ListHeaderComponent={
           <>
             <Image
@@ -83,7 +83,7 @@ export default function Index() {
                       showsHorizontalScrollIndicator={false}
                       contentContainerStyle={{ gap: 16 }}
                       renderItem={({ item, index }) => (
-                        <TrendingCard movie={item} index={index} />
+                        <TrendingCard movie={item} index={index} />                        
                       )}
                     />
                   </>
