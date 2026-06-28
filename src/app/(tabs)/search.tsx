@@ -19,7 +19,7 @@ const Search = () => {
         error,
         fetchData,
         reset,
-    } = useFetch(useCallback((signal: AbortSignal) => fetchMovies(searchQuery, signal), [searchQuery]), false);
+    } = useFetch(useCallback((signal?: AbortSignal) => fetchMovies(searchQuery, signal), [searchQuery]), false);
 
     useEffect(() => {
         if (!searchQuery.trim()) {

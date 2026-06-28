@@ -1,5 +1,6 @@
-import { Stack } from "expo-router";
 import client from "@/services/appwrite";
+import { Stack } from "expo-router";
+import { StatusBar } from "react-native";
 import './globals.css';
 
 client.ping().then(() => {
@@ -9,8 +10,11 @@ client.ping().then(() => {
 });
 
 export default function RootLayout() {
-  return <Stack>
+  return <>
+  <StatusBar hidden={true} />
+  <Stack>
     <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: 'fade' }} />
     <Stack.Screen name="movie/[id]" options={{ headerShown: false }} />
   </Stack>
+  </>
 }

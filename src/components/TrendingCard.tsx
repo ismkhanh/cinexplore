@@ -1,3 +1,4 @@
+import { images } from '@/constants/images'
 import MaskedView from '@react-native-masked-view/masked-view'
 import { Link } from 'expo-router'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
@@ -18,8 +19,8 @@ const TrendingCard = ({ movie, index }: TrendingCardProps) => {
                         }
                     >
                         <Image
-                            source={require('@/assets/images/rankingGradient.png')}
-                            className="w-14 h-14"
+                            source={images.rankingGradient}
+                            className="size-14"
                             resizeMode="cover"
                         />
                     </MaskedView>
