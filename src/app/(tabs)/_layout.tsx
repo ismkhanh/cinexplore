@@ -39,7 +39,7 @@ function FloatingTabBar({ state, navigation }: any) {
                   tintColor="#151312"
                   className="size-5"
                 />
-                <Text className="text-secondary text-base font-semibold ml-2">
+                <Text className="text- text-base font-semibold ml-2">
                   {tab.title}
                 </Text>
               </ImageBackground>

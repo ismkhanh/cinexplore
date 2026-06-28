@@ -7,6 +7,7 @@ import useFetch from "@/services/useFetch";
 import { useRouter } from "expo-router";
 import { useCallback } from "react";
 import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
   const router = useRouter();
@@ -17,6 +18,8 @@ export default function Index() {
     error: moviesError
   } = useFetch(useCallback((signal: AbortSignal) => fetchMovies(undefined, signal), []));
 
+  const insets = useSafeAreaInsets();
+  
   return (
     <View className="flex-1 bg-primary">
       <Image
@@ -40,8 +43,9 @@ export default function Index() {
         ListHeaderComponent={
           <>
             <Image
+              style={{ marginTop: insets.top + 20 }}
               source={icons.logo}
-              className="w-12 h-10 mt-20 mb-5 mx-auto"
+              className="w-12 h-10 mb-5 mx-auto"
             />
             {moviesLoading ? (
               <View className="items-center justify-center py-20">
@@ -54,8 +58,9 @@ export default function Index() {
             ) : (
               <>
                 <SearchBar
-                  onPress={() => router.push("/search")}
+                  onPress={() => router.navigate("/search")}
                   placeholder="Search movies..."
+                  editable={false}
                 />
                 <Text className="text-white text-2xl font-semibold mt-5 mb-3">Popular Movies</Text>
               </>
