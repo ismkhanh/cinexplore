@@ -1,8 +1,10 @@
 import MovieCard from "@/components/MovieCard";
 import SearchBar from "@/components/SearchBar";
+import TrendingCard from "@/components/TrendingCard";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
+import { getTrendingMovies } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
 import { useRouter } from "expo-router";
 import { useCallback } from "react";
@@ -16,7 +18,13 @@ export default function Index() {
     data: movies,
     loading: moviesLoading,
     error: moviesError
-  } = useFetch(useCallback((signal: AbortSignal) => fetchMovies(undefined, signal), []));
+  } = useFetch(useCallback((signal?: AbortSignal) => fetchMovies(undefined, signal), []));
+
+  const {
+    data: trendingMovies,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useFetch(useCallback(() => getTrendingMovies(), []))
 
   const insets = useSafeAreaInsets();
   
@@ -62,6 +70,25 @@ export default function Index() {
                   placeholder="Search movies..."
                   editable={false}
                 />
+
+                {trendingLoading ? (
+                  <ActivityIndicator size="small" color="#ab8bff" className="mt-5" />
+                ) : trendingMovies && trendingMovies.length > 0 && (
+                  <>
+                    <Text className="text-white text-2xl font-semibold mt-5 mb-3">Top Searched Movies</Text>
+                    <FlatList
+                      data={trendingMovies}
+                      keyExtractor={(item) => item.movie_id.toString()}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={{ gap: 16 }}
+                      renderItem={({ item, index }) => (
+                        <TrendingCard movie={item} index={index} />
+                      )}
+                    />
+                  </>
+                )}
+
                 <Text className="text-white text-2xl font-semibold mt-5 mb-3">Popular Movies</Text>
               </>
             )}
