@@ -1,21 +1,45 @@
 import { icons } from '@/constants/icons';
 import { fetchMovieDetails, TMDB } from '@/services/api';
+import { useFavoritesStore } from '@/store/useFavoritesStore';
 import useFetch from '@/services/useFetch';
+import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback } from 'react';
 import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+function movieDetailsToMovie(details: MovieDetails): Movie {
+  return {
+    id: details.id,
+    title: details.title,
+    adult: details.adult,
+    backdrop_path: details.backdrop_path ?? '',
+    genre_ids: details.genres.map((g) => g.id),
+    original_language: details.original_language,
+    original_title: details.original_title,
+    overview: details.overview ?? '',
+    popularity: details.popularity,
+    poster_path: details.poster_path ?? '',
+    release_date: details.release_date,
+    video: details.video,
+    vote_average: details.vote_average,
+    vote_count: details.vote_count,
+  };
+}
+
 const MovieDetails = () => {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { toggleFavorite, isFavorite } = useFavoritesStore();
 
   const {
     data: movie,
     loading,
     error,
   } = useFetch(useCallback(() => fetchMovieDetails(id as string), []));
+
+  const favorited = movie ? isFavorite(movie.id) : false;
 
   if (loading) {
     return (
@@ -49,6 +73,19 @@ const MovieDetails = () => {
 
           {/* Gradient overlay */}
           <View className="absolute bottom-0 left-0 right-0 h-30 bg-primary opacity-80" />
+
+          {/* Favorite button */}
+          <Pressable
+            onPress={() => toggleFavorite(movieDetailsToMovie(movie))}
+            style={{ top: insets.top + 10 }}
+            className="absolute right-4 bg-black/50 rounded-full p-2"
+          >
+            <Ionicons
+              name={favorited ? 'heart' : 'heart-outline'}
+              size={24}
+              color={favorited ? '#FF6B6B' : '#fff'}
+            />
+          </Pressable>
 
         </View>
 
