@@ -1,119 +1,75 @@
 import { icons } from "@constants/icons";
 import { images } from "@constants/images";
 import { Tabs } from 'expo-router';
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { Image, ImageBackground, Pressable, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const TabIcon = ({ focused, icon, title }: any) => {
-    if (focused) {
+const tabs = [
+  { name: "index", title: "Home", icon: icons.home },
+  { name: "search", title: "Search", icon: icons.search },
+  { name: "saved", title: "Save", icon: icons.save },
+  { name: "profile", title: "Profile", icon: icons.person },
+];
+
+function FloatingTabBar({ state, navigation }: any) {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View
+      style={{ marginBottom: insets.bottom + 20 }}
+      className="absolute bottom-0 left-5 right-5 h-[52px] flex-row bg-[#0f0D23] rounded-full border border-[#0f0D23] overflow-hidden"
+    >
+      {state.routes.map((route: any, index: number) => {
+        const tab = tabs[index];
+        const focused = state.index === index;
+
         return (
-            <ImageBackground 
-                source= {images.highlight}
-                className="flex flex-row w-full flex-1 min-w-[112px] min-h-[53px] mt-4 justify-center items-center rounded-full overflow-hidden"
-            >
+          <Pressable
+            key={route.key}
+            onPress={() => navigation.navigate(route.name)}
+            className="flex-1 h-full justify-center items-center"
+          >
+            {focused ? (
+              <ImageBackground
+                source={images.highlight}
+                className="flex-row h-full w-full justify-center items-center rounded-full overflow-hidden"
+              >
                 <Image
-                    source={icon}
-                    tintColor="#151312"
-                    className="size-5"
+                  source={tab.icon}
+                  tintColor="#151312"
+                  className="size-5"
                 />
-                <Text className="text-secondary text-base font-semibold ml-2">{title}</Text>
-            </ImageBackground>
-        )
-    }
-    return (
-        <View className="size-full justify-center items-center mt-4 rounded-full">
-            <Image
-                source={icon}
+                <Text className="text-secondary text-base font-semibold ml-2">
+                  {tab.title}
+                </Text>
+              </ImageBackground>
+            ) : (
+              <Image
+                source={tab.icon}
                 tintColor="#A8B5DB"
                 className="size-5"
-            />
-
-        </View>
-    )
+              />
+            )}
+          </Pressable>
+        );
+      })}
+    </View>
+  );
 }
 
-const _Layout = () => {
+export default function _Layout() {
   return (
-   <Tabs 
-    screenOptions={{
-        tabBarShowLabel: false,
-        tabBarItemStyle:{
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-        tabBarStyle: {
-            backgroundColor: '#0f0D23',
-            borderRadius: 50,
-            marginHorizontal: 20,
-            marginBottom: 36,
-            height: 48,
-            position: 'absolute',
-            overflow: 'hidden',
-            borderWidth: 1,
-            borderColor: '#0f0D23',
-        }
-    }}>
-    <Tabs.Screen 
-        name="index" 
-        options={{ 
-            title: 'Home', 
-            headerShown: false,
-            tabBarIcon: ({focused}) => (
-                <TabIcon 
-                    focused={focused}
-                    icon={icons.home}
-                    title="Home"
-                />
-            ) 
-        }}
-    />
-    <Tabs.Screen 
-        name="search" 
-        options={{ 
-            title: 'Search', 
-            headerShown: false,
-            tabBarIcon: ({focused}) => (
-                <TabIcon 
-                    focused={focused}
-                    icon={icons.search}
-                    title="Search"
-                />
-            ) 
-        }} 
-    />
-    <Tabs.Screen 
-        name="saved" 
-        options={{ 
-            title: 'Save', 
-            headerShown: false,
-            tabBarIcon: ({focused}) => (
-                <TabIcon 
-                    focused={focused}
-                    icon={icons.save}
-                    title="Save"
-                />
-            ) 
-        }} 
-    />
-    <Tabs.Screen 
-        name="profile" 
-        options={{ 
-            title: 'Profile', 
-            headerShown: false,
-            tabBarIcon: ({focused}) => (
-                <TabIcon 
-                    focused={focused}
-                    icon={icons.person}
-                    title="Profile"
-                />
-            ) 
-        }} 
-    />
-   </Tabs>
-  )
+    <Tabs 
+        tabBar={(props) => <FloatingTabBar {...props} />}
+        screenOptions={{ animation: 'shift' }} 
+    >
+      {tabs.map((tab) => (
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{ headerShown: false }}
+        />
+      ))}
+    </Tabs>
+  );
 }
-
-export default _Layout
-
-const styles = StyleSheet.create({})

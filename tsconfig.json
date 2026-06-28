@@ -9,7 +9,8 @@
       "@/assets/*": [
         "./assets/*"
       ],
-      "@constants/*": ["./constants/*"]
+      "@constants/*": ["./constants/*"],
+      "@services/*": ["./src/services/*"]
     }
   },
   "include": [
