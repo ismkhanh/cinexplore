@@ -1,5 +1,5 @@
-import { icons } from "@constants/icons";
-import { images } from "@constants/images";
+import { icons } from "@/constants/icons";
+import { images } from "@/constants/images";
 import { Tabs } from 'expo-router';
 import { Image, ImageBackground, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

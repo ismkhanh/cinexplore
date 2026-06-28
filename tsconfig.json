@@ -7,9 +7,9 @@
         "./src/*"
       ],
       "@/assets/*": [
-        "./assets/*"
+        "./src/assets/*"
       ],
-      "@constants/*": ["./constants/*"],
+      "@constants/*": ["./src/constants/*"],
       "@services/*": ["./src/services/*"]
     }
   },
